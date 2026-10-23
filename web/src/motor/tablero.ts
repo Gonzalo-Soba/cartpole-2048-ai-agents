@@ -20,7 +20,7 @@ export type Rng = () => number
 export const PROB_DOS = 0.9
 
 // Igual que en Python: dos fichas de exponente 15 no se fusionan (el nibble no da para 16).
-const EXPONENTE_MAXIMO = 15
+export const EXPONENTE_MAXIMO = 15
 
 /**
  * Índices de cada línea en el orden en que se recorren al mover: el primero es
