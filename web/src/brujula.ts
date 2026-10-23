@@ -1,6 +1,6 @@
-export type Direccion = 'arriba' | 'abajo' | 'izquierda' | 'derecha'
+import { DIRECCIONES, type Direccion } from './motor/tablero'
 
-export const DIRECCIONES: readonly Direccion[] = ['arriba', 'abajo', 'izquierda', 'derecha']
+export { DIRECCIONES, type Direccion }
 
 /** Valor de cada jugada; `null` si la jugada es ilegal. */
 export type ValoresBrujula = Record<Direccion, number | null>
@@ -25,6 +25,53 @@ export function rellenoBrujula(valores: ValoresBrujula): Record<Direccion, numbe
     else relleno[d] = RELLENO_MINIMO + (1 - RELLENO_MINIMO) * ((v - min) / (max - min))
   }
   return relleno
+}
+
+/** Lo que dibuja un medidor: texto visible, llenado, estado y texto accesible. */
+export interface Medidor {
+  texto: string
+  relleno: number
+  estado: 'elegida' | 'legal' | 'ilegal'
+  etiqueta: string
+}
+
+const NOMBRES: Record<Direccion, string> = {
+  arriba: 'Arriba',
+  abajo: 'Abajo',
+  izquierda: 'Izquierda',
+  derecha: 'Derecha',
+}
+
+/** Medidores con el valor que calculó el agente para cada jugada. */
+export function medidoresDeValores(valores: ValoresBrujula, elegida: Direccion): Record<Direccion, Medidor> {
+  const relleno = rellenoBrujula(valores)
+  const medidores = {} as Record<Direccion, Medidor>
+  for (const d of DIRECCIONES) {
+    const valor = valores[d]
+    const estado = valor === null ? 'ilegal' : d === elegida ? 'elegida' : 'legal'
+    const texto = valor === null ? 'ilegal' : formatearNumero(valor)
+    const sufijo = estado === 'elegida' ? ', jugada elegida' : ''
+    medidores[d] = { texto, relleno: relleno[d], estado, etiqueta: `${NOMBRES[d]}: ${texto}${sufijo}` }
+  }
+  return medidores
+}
+
+/**
+ * Medidores sin agente: solo lo que sabe el motor, qué jugadas son legales y
+ * cuál fue la última. Sin valores inventados.
+ */
+export function medidoresDeLegalidad(legales: readonly Direccion[], ultima: Direccion | null): Record<Direccion, Medidor> {
+  const medidores = {} as Record<Direccion, Medidor>
+  for (const d of DIRECCIONES) {
+    if (!legales.includes(d)) {
+      medidores[d] = { texto: 'ilegal', relleno: 0, estado: 'ilegal', etiqueta: `${NOMBRES[d]}: ilegal` }
+    } else if (d === ultima) {
+      medidores[d] = { texto: 'última', relleno: 1, estado: 'elegida', etiqueta: `${NOMBRES[d]}: legal, última jugada` }
+    } else {
+      medidores[d] = { texto: 'legal', relleno: 0, estado: 'legal', etiqueta: `${NOMBRES[d]}: legal` }
+    }
+  }
+  return medidores
 }
 
 const numero = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0, useGrouping: 'always' })

@@ -11,6 +11,29 @@
   font-weight: 650;
 }
 
+.panel__titulo--siempre {
+  display: block;
+}
+
+.panel__datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--e-3);
+  margin: 0;
+}
+
+.panel__datos dt {
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+
+.panel__datos dd {
+  margin: 0;
+  font-size: var(--fs-4);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 .panel__desplegar {
   display: flex;
   width: 100%;
