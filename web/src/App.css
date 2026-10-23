@@ -18,11 +18,25 @@
   justify-self: center;
 }
 
-.escenario__leyenda {
+.escenario__estado {
+  display: grid;
+  justify-items: center;
+  gap: var(--e-3);
   margin-top: var(--e-3);
+  text-align: center;
+}
+
+.escenario__mensaje:empty {
+  display: none;
+}
+
+.escenario__mensaje {
+  font-weight: 560;
+}
+
+.escenario__leyenda {
   color: var(--tinta-2);
   font-size: var(--fs-1);
-  text-align: center;
 }
 
 @media (min-width: 1024px) {

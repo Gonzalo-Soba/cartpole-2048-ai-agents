@@ -36,9 +36,13 @@ export function partidaDesdeTablero(tablero: Tablero): Partida {
   }
 }
 
-/** Tablero vacío con dos fichas al azar, como `GameBoard()` en Python. */
-export function nuevaPartida(rng: Rng): Partida {
-  let { fichas, siguienteId } = agregarFichaVisible([], rng, 1)
+/**
+ * Tablero vacío con dos fichas al azar, como `GameBoard()` en Python.
+ * `primerId` sigue la numeración de la partida anterior: si los ids se
+ * repitieran, la UI reutilizaría las fichas viejas y las animaría.
+ */
+export function nuevaPartida(rng: Rng, primerId = 1): Partida {
+  let { fichas, siguienteId } = agregarFichaVisible([], rng, primerId)
   ;({ fichas, siguienteId } = agregarFichaVisible(fichas, rng, siguienteId))
   return { ...partidaDesdeTablero(tableroDeFichas(fichas)), fichas, siguienteId }
 }

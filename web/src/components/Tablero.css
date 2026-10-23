@@ -1,12 +1,21 @@
 /* El tablero es el contenedor: fichas y separaciones escalan con su ancho. */
 .tablero {
+  --separacion: 2.4cqi;
+  position: relative;
   container-type: inline-size;
+}
+
+/* Al jugar con el dedo, el tablero no debe mover la página. */
+.tablero--tactil {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .tablero__grilla,
 .tablero__fila {
   display: grid;
-  gap: 2.4cqi;
+  gap: var(--separacion);
 }
 
 .tablero__fila {
@@ -14,7 +23,6 @@
 }
 
 .celda {
-  display: grid;
   aspect-ratio: 1;
   border-radius: var(--radio-ficha);
   background: var(--hueco);
@@ -22,10 +30,27 @@
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
 }
 
+.tablero__capa {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/*
+ * Cada ficha se ubica con transform según --fila y --col; el 100 % del
+ * translate es el lado de la propia ficha. Si llega una jugada a mitad de
+ * camino, la transición sale desde donde está hacia el destino nuevo.
+ */
 .ficha {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
   display: grid;
   place-items: center;
-  border-radius: inherit;
+  width: calc((100% - 3 * var(--separacion)) / 4);
+  aspect-ratio: 1;
+  border-radius: var(--radio-ficha);
   background: var(--ficha-fondo);
   color: var(--ficha-texto);
   font-size: 9.4cqi;
@@ -33,8 +58,59 @@
   font-variation-settings: 'wdth' var(--ficha-wdth);
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  transform: translate(
+    calc(var(--col) * (100% + var(--separacion))),
+    calc(var(--fila) * (100% + var(--separacion)))
+  );
+  transition: transform var(--dur-desliz) var(--curva);
 }
 
 .ficha[data-cuerpo='reducido'] {
   font-size: 7.6cqi;
+}
+
+/* Las absorbidas pasan por debajo de la ficha fusionada. */
+.ficha[data-animacion='absorbida'] {
+  z-index: 1;
+}
+
+/* Fusión y aparición esperan a que termine el deslizamiento. */
+.ficha[data-animacion='fusion'] {
+  z-index: 3;
+  animation: fusion 180ms var(--curva) var(--dur-desliz) backwards;
+}
+
+.ficha[data-animacion='nueva'] {
+  z-index: 3;
+  animation: aparecer 140ms var(--curva) var(--dur-desliz) backwards;
+}
+
+@keyframes fusion {
+  0% {
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+    scale: 1;
+  }
+  50% {
+    scale: 1.08;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ficha {
+    animation: none !important;
+    transition: none !important;
+  }
 }
