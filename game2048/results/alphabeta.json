@@ -1,0 +1,237 @@
+{
+ "suite": "alphabeta",
+ "wall_minutes": 1.1,
+ "results": {
+  "positions": [
+   {
+    "depth": 1,
+    "positions": 100,
+    "plain_nodes_per_position": 38.1,
+    "plain_ms_per_position": 0.101,
+    "ab_nodes_per_position": 27.3,
+    "ab_ms_per_position": 0.091,
+    "prunings_per_position": 1.3,
+    "same_decisions": true,
+    "node_reduction_pct": 28.3,
+    "speedup": 1.11
+   },
+   {
+    "depth": 2,
+    "positions": 100,
+    "plain_nodes_per_position": 1661.8,
+    "plain_ms_per_position": 4.615,
+    "ab_nodes_per_position": 601.7,
+    "ab_ms_per_position": 1.67,
+    "prunings_per_position": 39.1,
+    "same_decisions": true,
+    "node_reduction_pct": 63.8,
+    "speedup": 2.76
+   },
+   {
+    "depth": 3,
+    "positions": 100,
+    "plain_nodes_per_position": 77888.0,
+    "plain_ms_per_position": 201.18,
+    "ab_nodes_per_position": 11981.6,
+    "ab_ms_per_position": 33.915,
+    "prunings_per_position": 841.3,
+    "same_decisions": true,
+    "node_reduction_pct": 84.6,
+    "speedup": 5.93
+   }
+  ],
+  "full_games": {
+   "minimax_d2": {
+    "spec": {
+     "kind": "minimax",
+     "depth": 2
+    },
+    "summary": {
+     "games": 5,
+     "win_rate": 0.2,
+     "max_tile_median": 1024.0,
+     "max_tile_distribution": {
+      "256": 1,
+      "1024": 3,
+      "2048": 1
+     },
+     "score_mean": 14564.0,
+     "score_std": 5733.8,
+     "moves_mean": 837.2,
+     "ms_per_move_mean": 7.678,
+     "nodes_per_move_mean": 2238.4,
+     "seconds_total": 31.6,
+     "prunings_per_move_mean": 0.0
+    },
+    "games": [
+     {
+      "seed": 0,
+      "moves": 758,
+      "max_tile": 1024,
+      "score": 12520,
+      "tile_sum": 1658,
+      "won": false,
+      "seconds": 6.28,
+      "ms_per_move": 8.285,
+      "nodes": 1702274,
+      "nodes_per_move": 2245.7,
+      "prunings": 0,
+      "label": "minimax_d2"
+     },
+     {
+      "seed": 1,
+      "moves": 882,
+      "max_tile": 1024,
+      "score": 15324,
+      "tile_sum": 1968,
+      "won": false,
+      "seconds": 9.57,
+      "ms_per_move": 10.85,
+      "nodes": 2119823,
+      "nodes_per_move": 2403.4,
+      "prunings": 0,
+      "label": "minimax_d2"
+     },
+     {
+      "seed": 2,
+      "moves": 404,
+      "max_tile": 256,
+      "score": 5220,
+      "tile_sum": 896,
+      "won": false,
+      "seconds": 3.033,
+      "ms_per_move": 7.507,
+      "nodes": 1108230,
+      "nodes_per_move": 2743.1,
+      "prunings": 0,
+      "label": "minimax_d2"
+     },
+     {
+      "seed": 3,
+      "moves": 1125,
+      "max_tile": 2048,
+      "score": 22692,
+      "tile_sum": 2460,
+      "won": true,
+      "seconds": 7.947,
+      "ms_per_move": 7.064,
+      "nodes": 2291081,
+      "nodes_per_move": 2036.5,
+      "prunings": 0,
+      "label": "minimax_d2"
+     },
+     {
+      "seed": 4,
+      "moves": 1017,
+      "max_tile": 1024,
+      "score": 17064,
+      "tile_sum": 2254,
+      "won": false,
+      "seconds": 4.765,
+      "ms_per_move": 4.685,
+      "nodes": 1793094,
+      "nodes_per_move": 1763.1,
+      "prunings": 0,
+      "label": "minimax_d2"
+     }
+    ]
+   },
+   "minimax_ab_d2": {
+    "spec": {
+     "kind": "minimax_ab",
+     "depth": 2
+    },
+    "summary": {
+     "games": 5,
+     "win_rate": 0.2,
+     "max_tile_median": 1024.0,
+     "max_tile_distribution": {
+      "256": 1,
+      "1024": 3,
+      "2048": 1
+     },
+     "score_mean": 14564.0,
+     "score_std": 5733.8,
+     "moves_mean": 837.2,
+     "ms_per_move_mean": 1.677,
+     "nodes_per_move_mean": 654.6,
+     "seconds_total": 7.0,
+     "prunings_per_move_mean": 46.9
+    },
+    "games": [
+     {
+      "seed": 0,
+      "moves": 758,
+      "max_tile": 1024,
+      "score": 12520,
+      "tile_sum": 1658,
+      "won": false,
+      "seconds": 1.261,
+      "ms_per_move": 1.664,
+      "nodes": 512405,
+      "nodes_per_move": 676.0,
+      "prunings": 35540,
+      "label": "minimax_ab_d2"
+     },
+     {
+      "seed": 1,
+      "moves": 882,
+      "max_tile": 1024,
+      "score": 15324,
+      "tile_sum": 1968,
+      "won": false,
+      "seconds": 2.025,
+      "ms_per_move": 2.296,
+      "nodes": 717824,
+      "nodes_per_move": 813.9,
+      "prunings": 50689,
+      "label": "minimax_ab_d2"
+     },
+     {
+      "seed": 2,
+      "moves": 404,
+      "max_tile": 256,
+      "score": 5220,
+      "tile_sum": 896,
+      "won": false,
+      "seconds": 0.637,
+      "ms_per_move": 1.577,
+      "nodes": 263754,
+      "nodes_per_move": 652.9,
+      "prunings": 17050,
+      "label": "minimax_ab_d2"
+     },
+     {
+      "seed": 3,
+      "moves": 1125,
+      "max_tile": 2048,
+      "score": 22692,
+      "tile_sum": 2460,
+      "won": true,
+      "seconds": 1.472,
+      "ms_per_move": 1.309,
+      "nodes": 555174,
+      "nodes_per_move": 493.5,
+      "prunings": 42050,
+      "label": "minimax_ab_d2"
+     },
+     {
+      "seed": 4,
+      "moves": 1017,
+      "max_tile": 1024,
+      "score": 17064,
+      "tile_sum": 2254,
+      "won": false,
+      "seconds": 1.566,
+      "ms_per_move": 1.54,
+      "nodes": 647454,
+      "nodes_per_move": 636.6,
+      "prunings": 51640,
+      "label": "minimax_ab_d2"
+     }
+    ]
+   }
+  },
+  "full_games_identical": true
+ }
+}

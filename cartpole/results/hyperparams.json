@@ -1,0 +1,307 @@
+{
+  "suite": "hyperparams",
+  "wall_minutes": 25.5,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "groups": {
+    "base": {
+      "runs": [
+        "hyper_D1_base_s0",
+        "hyper_D1_base_s1",
+        "hyper_D1_base_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.2,
+        "gamma": 0.9995,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.9995,
+        "stochastic": false
+      },
+      "eval_exact_mean": 500.0,
+      "eval_exact_std_between_seeds": 0.0,
+      "eval_exact_per_seed": [
+        500.0,
+        500.0,
+        500.0
+      ],
+      "success_rate_mean": 1.0,
+      "train_mean_last_1000": 499.17,
+      "first_episode_ma100_ge_475": [
+        6967,
+        6304,
+        6721
+      ],
+      "train_seconds_mean": 151.6,
+      "us_per_step_mean": 49.85,
+      "q_evals_per_step_mean": 3.828
+    },
+    "alpha=0.05": {
+      "runs": [
+        "hyper_D1_alpha=0.05_s0",
+        "hyper_D1_alpha=0.05_s1",
+        "hyper_D1_alpha=0.05_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.05,
+        "gamma": 0.9995,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.9995,
+        "stochastic": false
+      },
+      "eval_exact_mean": 357.72,
+      "eval_exact_std_between_seeds": 131.1,
+      "eval_exact_per_seed": [
+        183.63,
+        500.0,
+        389.53
+      ],
+      "success_rate_mean": 0.41,
+      "train_mean_last_1000": 339.94,
+      "first_episode_ma100_ge_475": [
+        null,
+        6805,
+        null
+      ],
+      "train_seconds_mean": 85.9,
+      "us_per_step_mean": 49.07,
+      "q_evals_per_step_mean": 3.846
+    },
+    "alpha=0.1": {
+      "runs": [
+        "hyper_D1_alpha=0.1_s0",
+        "hyper_D1_alpha=0.1_s1",
+        "hyper_D1_alpha=0.1_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.1,
+        "gamma": 0.9995,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.9995,
+        "stochastic": false
+      },
+      "eval_exact_mean": 484.96,
+      "eval_exact_std_between_seeds": 18.5,
+      "eval_exact_per_seed": [
+        495.97,
+        458.9,
+        500.0
+      ],
+      "success_rate_mean": 0.91,
+      "train_mean_last_1000": 383.81,
+      "first_episode_ma100_ge_475": [
+        5314,
+        5997,
+        5200
+      ],
+      "train_seconds_mean": 137.5,
+      "us_per_step_mean": 48.79,
+      "q_evals_per_step_mean": 3.824
+    },
+    "alpha=0.4": {
+      "runs": [
+        "hyper_D1_alpha=0.4_s0",
+        "hyper_D1_alpha=0.4_s1",
+        "hyper_D1_alpha=0.4_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.4,
+        "gamma": 0.9995,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.9995,
+        "stochastic": false
+      },
+      "eval_exact_mean": 500.0,
+      "eval_exact_std_between_seeds": 0.0,
+      "eval_exact_per_seed": [
+        500.0,
+        500.0,
+        500.0
+      ],
+      "success_rate_mean": 1.0,
+      "train_mean_last_1000": 494.58,
+      "first_episode_ma100_ge_475": [
+        7772,
+        5532,
+        5370
+      ],
+      "train_seconds_mean": 144.2,
+      "us_per_step_mean": 47.68,
+      "q_evals_per_step_mean": 3.821
+    },
+    "gamma=0.99": {
+      "runs": [
+        "hyper_D1_gamma=0.99_s0",
+        "hyper_D1_gamma=0.99_s1",
+        "hyper_D1_gamma=0.99_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.2,
+        "gamma": 0.99,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.9995,
+        "stochastic": false
+      },
+      "eval_exact_mean": 330.15,
+      "eval_exact_std_between_seeds": 120.1,
+      "eval_exact_per_seed": [
+        500.0,
+        244.31,
+        246.14
+      ],
+      "success_rate_mean": 0.347,
+      "train_mean_last_1000": 382.67,
+      "first_episode_ma100_ge_475": [
+        6810,
+        6701,
+        7692
+      ],
+      "train_seconds_mean": 125.8,
+      "us_per_step_mean": 48.9,
+      "q_evals_per_step_mean": 3.813
+    },
+    "gamma=0.999": {
+      "runs": [
+        "hyper_D1_gamma=0.999_s0",
+        "hyper_D1_gamma=0.999_s1",
+        "hyper_D1_gamma=0.999_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.2,
+        "gamma": 0.999,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.9995,
+        "stochastic": false
+      },
+      "eval_exact_mean": 456.57,
+      "eval_exact_std_between_seeds": 60.4,
+      "eval_exact_per_seed": [
+        498.55,
+        371.16,
+        500.0
+      ],
+      "success_rate_mean": 0.77,
+      "train_mean_last_1000": 475.77,
+      "first_episode_ma100_ge_475": [
+        5337,
+        6089,
+        6152
+      ],
+      "train_seconds_mean": 138.9,
+      "us_per_step_mean": 49.15,
+      "q_evals_per_step_mean": 3.821
+    },
+    "decay=0.999": {
+      "runs": [
+        "hyper_D1_decay=0.999_s0",
+        "hyper_D1_decay=0.999_s1",
+        "hyper_D1_decay=0.999_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.2,
+        "gamma": 0.9995,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.999,
+        "stochastic": false
+      },
+      "eval_exact_mean": 354.2,
+      "eval_exact_std_between_seeds": 108.79,
+      "eval_exact_per_seed": [
+        500.0,
+        238.76,
+        323.85
+      ],
+      "success_rate_mean": 0.44,
+      "train_mean_last_1000": 433.92,
+      "first_episode_ma100_ge_475": [
+        2754,
+        3457,
+        4264
+      ],
+      "train_seconds_mean": 158.2,
+      "us_per_step_mean": 46.93,
+      "q_evals_per_step_mean": 3.927
+    },
+    "decay=0.9998": {
+      "runs": [
+        "hyper_D1_decay=0.9998_s0",
+        "hyper_D1_decay=0.9998_s1",
+        "hyper_D1_decay=0.9998_s2"
+      ],
+      "n_seeds": 3,
+      "algorithm": "q_learning",
+      "n_actions": 2,
+      "discretization": "D1 uniforme (10x10x20x20 = 40000 estados)",
+      "config": {
+        "episodes": 10000,
+        "alpha": 0.2,
+        "gamma": 0.9995,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.001,
+        "epsilon_decay": 0.9998,
+        "stochastic": false
+      },
+      "eval_exact_mean": 461.97,
+      "eval_exact_std_between_seeds": 47.63,
+      "eval_exact_per_seed": [
+        394.65,
+        497.55,
+        493.72
+      ],
+      "success_rate_mean": 0.757,
+      "train_mean_last_1000": 370.68,
+      "first_episode_ma100_ge_475": [
+        null,
+        9789,
+        null
+      ],
+      "train_seconds_mean": 57.7,
+      "us_per_step_mean": 34.55,
+      "q_evals_per_step_mean": 3.424
+    }
+  }
+}

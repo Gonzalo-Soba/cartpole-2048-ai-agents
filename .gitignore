@@ -1,0 +1,20 @@
+# Entornos virtuales y caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Frontend
+node_modules/
+web/dist/
+*.local
+.env
+.env.*
