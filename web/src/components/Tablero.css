@@ -1,0 +1,40 @@
+/* El tablero es el contenedor: fichas y separaciones escalan con su ancho. */
+.tablero {
+  container-type: inline-size;
+}
+
+.tablero__grilla,
+.tablero__fila {
+  display: grid;
+  gap: 2.4cqi;
+}
+
+.tablero__fila {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.celda {
+  display: grid;
+  aspect-ratio: 1;
+  border-radius: var(--radio-ficha);
+  background: var(--hueco);
+  /* Borde interior: la celda vacía casi no contrasta con el marco */
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.ficha {
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--ficha-fondo);
+  color: var(--ficha-texto);
+  font-size: 9.4cqi;
+  font-weight: var(--ficha-peso);
+  font-variation-settings: 'wdth' var(--ficha-wdth);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.ficha[data-cuerpo='reducido'] {
+  font-size: 7.6cqi;
+}
