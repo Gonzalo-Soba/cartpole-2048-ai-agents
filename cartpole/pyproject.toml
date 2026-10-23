@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "cartpole-qlearning"
+version = "1.0.0"
+description = "Q-learning tabular y Stochastic Q-learning en CartPole-v1"
+authors = ["Gonzalo Soba"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.14"
+numpy = "^2.1"
+gymnasium = "^1.2"
+matplotlib = "^3.9"
+pygame = { version = "^2.6", optional = true }
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.30"
+pandas = "^2.2"
+
+[tool.poetry.extras]
+render = ["pygame"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
