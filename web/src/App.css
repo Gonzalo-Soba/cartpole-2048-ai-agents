@@ -1,0 +1,38 @@
+.pagina {
+  display: grid;
+  gap: var(--e-5);
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: var(--e-4);
+}
+
+.escenario {
+  display: grid;
+  gap: var(--e-5);
+  align-items: start;
+}
+
+.escenario__juego {
+  width: 100%;
+  max-width: 36rem;
+  justify-self: center;
+}
+
+.escenario__leyenda {
+  margin-top: var(--e-3);
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .pagina {
+    gap: var(--e-6);
+    padding: var(--e-6);
+  }
+
+  .escenario {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22.5rem);
+    gap: var(--e-7);
+  }
+}

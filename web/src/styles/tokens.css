@@ -1,0 +1,91 @@
+/*
+ * Tokens de diseño. Los contrastes están medidos (WCAG 2.x):
+ * texto de ficha >= 4.5:1, bordes de controles y foco >= 3:1 contra su fondo.
+ */
+:root {
+  color-scheme: light;
+
+  /* Superficies */
+  --niebla: #e9eef2; /* fondo de página, frío */
+  --papel: #f7f9fb; /* paneles */
+  --pizarra: #22304a; /* marco del tablero */
+  --hueco: #2c3b57; /* celda vacía */
+  --tinta: #14213a; /* texto principal */
+  --tinta-2: #4a5a73; /* texto secundario */
+  --linea: #cbd5e0; /* separadores decorativos */
+  --linea-control: #7f8ea4; /* bordes de controles, 3.15:1 sobre papel */
+  --senal: #ffb020; /* acento único: jugada elegida, foco, acción principal */
+  --sobre-pizarra: #b8c4d6; /* texto secundario sobre el marco */
+
+  /* Rampa de fichas: de frío a cálido según el exponente */
+  --t2: #f4f7fa;
+  --t4: #dce8f3;
+  --t8: #b9d3ec;
+  --t16: #8db7e2;
+  --t32: #5e97d6;
+  --t64: #3b76c4;
+  --t128: #6b5bd2;
+  --t256: #8a4fd0;
+  --t512: #b144c2;
+  --t1024: #cf3a88; /* oscurecido desde #d9418f para llegar a 4.5:1 con blanco */
+  --t2048: #ff5a5f;
+  --tmax: #ff8a3d;
+
+  /* Texto de ficha: no cambia con el tema porque la rampa tampoco */
+  --ficha-oscura: #14213a;
+  --ficha-clara: #ffffff;
+
+  /* Tipografía: una familia, escala 1.25 */
+  --fuente: 'Archivo Variable', system-ui, sans-serif;
+  --fs-1: 0.8125rem; /* 13 */
+  --fs-2: 1rem; /* 16 */
+  --fs-3: 1.25rem; /* 20 */
+  --fs-4: 1.5625rem; /* 25 */
+  --fs-5: 1.9375rem; /* 31 */
+  --fs-6: 2.4375rem; /* 39 */
+
+  /* Espaciado en base 4 */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+
+  --radio-ficha: 6px;
+  --radio-control: 8px;
+  --radio-tablero: 12px;
+
+  /* Movimiento */
+  --dur-desliz: 110ms;
+  --dur-brujula: 240ms;
+  --curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Modo oscuro: se invierten las superficies; rampa y ámbar se mantienen */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --niebla: #0f1626;
+    --papel: #17213a;
+    --pizarra: #2a3a5a;
+    --hueco: #1b2742;
+    --tinta: #e6ecf3;
+    --tinta-2: #9aa9c0;
+    --linea: #34435f;
+    --linea-control: #71829f;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --niebla: #0f1626;
+  --papel: #17213a;
+  --pizarra: #2a3a5a;
+  --hueco: #1b2742;
+  --tinta: #e6ecf3;
+  --tinta-2: #9aa9c0;
+  --linea: #34435f;
+  --linea-control: #71829f;
+}
