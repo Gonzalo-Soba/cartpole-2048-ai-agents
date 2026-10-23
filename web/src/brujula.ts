@@ -1,6 +1,6 @@
-export type Direccion = 'arriba' | 'abajo' | 'izquierda' | 'derecha'
+import { DIRECCIONES, type Direccion } from './motor/tablero'
 
-export const DIRECCIONES: readonly Direccion[] = ['arriba', 'abajo', 'izquierda', 'derecha']
+export { DIRECCIONES, type Direccion }
 
 /** Valor de cada jugada; `null` si la jugada es ilegal. */
 export type ValoresBrujula = Record<Direccion, number | null>
