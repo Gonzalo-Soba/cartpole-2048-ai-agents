@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatearNumero, medidoresDeLegalidad, medidoresDeValores } from './brujula'
 import { Brujula } from './components/Brujula'
 import { Cabecera, type Modo } from './components/Cabecera'
@@ -6,6 +6,7 @@ import { PanelControl } from './components/PanelControl'
 import { PanelPartida } from './components/PanelPartida'
 import { Tablero } from './components/Tablero'
 import { BRUJULA_EJEMPLO, FICHAS_EJEMPLO } from './datos/ejemplo'
+import { useAgente } from './hooks/useAgente'
 import { usePartida } from './hooks/usePartida'
 import { useTeclado } from './hooks/useTeclado'
 import { tableroDeFichas } from './motor/fichas'
@@ -17,6 +18,18 @@ function App() {
   const { partida, jugar, nueva } = usePartida()
   const jugando = modo === 'jugar'
   useTeclado(jugar, jugando)
+  const agente = useAgente()
+  const { iniciar } = agente
+
+  // Pyodide pesa: se carga cuando la página queda ociosa, sin frenar el modo Jugar.
+  useEffect(() => {
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(iniciar, { timeout: 3000 })
+      return () => cancelIdleCallback(id)
+    }
+    const id = setTimeout(iniciar, 1500)
+    return () => clearTimeout(id)
+  }, [iniciar])
 
   const tablero = tableroDeFichas(partida.fichas)
   const fichaMaxima = valorDeExponente(exponenteMaximo(tablero))
@@ -69,7 +82,7 @@ function App() {
             )}
           </div>
         </section>
-        {jugando ? <PanelPartida partida={partida} fichaMaxima={fichaMaxima} onNueva={nueva} /> : <PanelControl />}
+        {jugando ? <PanelPartida partida={partida} fichaMaxima={fichaMaxima} onNueva={nueva} /> : <PanelControl estado={agente.estado} onReintentar={agente.reintentar} />}
       </main>
     </div>
   )

@@ -67,8 +67,18 @@
 }
 
 .panel__aviso {
+  display: grid;
+  gap: var(--e-1);
   color: var(--tinta-2);
   font-size: var(--fs-1);
+}
+
+.panel__detalle {
+  overflow-wrap: anywhere;
+}
+
+.panel__reintentar {
+  justify-self: start;
 }
 
 .campo {

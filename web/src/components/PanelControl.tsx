@@ -1,12 +1,22 @@
 import { useState } from 'react'
+import type { EtapaCarga } from '../agentes/protocolo'
 import { AGENTES, EVALUACIONES, PROFUNDIDADES } from '../datos/agentes'
+import type { EstadoAgente } from '../hooks/useAgente'
 import './PanelControl.css'
 
-/**
- * Controles del agente. En esta versión están todos deshabilitados: los
- * agentes en Python todavía no están conectados.
- */
-export function PanelControl() {
+const ETAPAS: Record<EtapaCarga, string> = {
+  pyodide: 'Paso 1 de 3: Python en el navegador.',
+  numpy: 'Paso 2 de 3: numpy.',
+  agentes: 'Paso 3 de 3: los agentes.',
+}
+
+interface Props {
+  estado: EstadoAgente
+  onReintentar: () => void
+}
+
+/** Controles del agente. Todavía deshabilitados: solo se muestra la carga. */
+export function PanelControl({ estado, onReintentar }: Props) {
   const [abierto, setAbierto] = useState(false)
   const conectado = false
   const agente = AGENTES.find((a) => a.id === 'expectimax')!
@@ -30,7 +40,26 @@ export function PanelControl() {
       </button>
 
       <div id="panel-cuerpo" className="panel__cuerpo" data-abierto={abierto}>
-        <p className="panel__aviso">Los agentes todavía no están conectados.</p>
+        <div className="panel__aviso" role="status">
+          {estado.fase === 'listo' && <p>Agentes listos.</p>}
+          {(estado.fase === 'inactivo' || estado.fase === 'cargando') && (
+            <>
+              <p>Cargando los agentes. Pasa una sola vez y puede tardar unos segundos.</p>
+              {estado.fase === 'cargando' && <p>{ETAPAS[estado.etapa]}</p>}
+            </>
+          )}
+          {estado.fase === 'error' && (
+            <>
+              <p>No se pudieron cargar los agentes. Revisá la conexión y probá de nuevo.</p>
+              <p className="panel__detalle">{estado.mensaje}</p>
+            </>
+          )}
+        </div>
+        {estado.fase === 'error' && (
+          <button type="button" className="boton panel__reintentar" onClick={onReintentar}>
+            Reintentar
+          </button>
+        )}
 
         <div className="campo">
           <label htmlFor="campo-agente">Agente</label>
