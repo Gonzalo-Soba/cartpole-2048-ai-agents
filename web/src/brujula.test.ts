@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatearNumero, medidoresDeLegalidad, rellenoBrujula } from './brujula'
+import { formatearMs, formatearNumero, medidoresDeAnalisis, medidoresDeLegalidad, rellenoBrujula } from './brujula'
 
 describe('rellenoBrujula', () => {
   it('llena la mejor jugada, deja un piso a la peor y vacía las ilegales', () => {
@@ -37,5 +37,48 @@ describe('medidoresDeLegalidad', () => {
 
   it('si la última jugada ya no es legal, gana ilegal', () => {
     expect(medidoresDeLegalidad(['arriba'], 'abajo').abajo.estado).toBe('ilegal')
+  })
+})
+
+describe('medidoresDeAnalisis', () => {
+  const tablero = [1, 2, ...Array(14).fill(0)] // legales: abajo y derecha
+
+  it('sin análisis muestra las jugadas legales del tablero actual', () => {
+    const m = medidoresDeAnalisis(null, tablero)
+    expect(m.arriba.estado).toBe('ilegal')
+    expect(m.abajo).toMatchObject({ estado: 'legal', texto: 'legal' })
+  })
+
+  it('con valores muestra los valores y la elegida', () => {
+    const analisis = {
+      valores: { arriba: null, abajo: 40, izquierda: null, derecha: 55.6 },
+      elegida: 'derecha' as const,
+      nodos: 10,
+      ms: 1,
+    }
+    const m = medidoresDeAnalisis({ analisis, tablero }, tablero)
+    expect(m.derecha).toMatchObject({ estado: 'elegida', texto: '55,6', relleno: 1 })
+    expect(m.abajo).toMatchObject({ estado: 'legal', texto: '40' })
+  })
+
+  it('el agente aleatorio no tiene valores: marca legales y la elegida', () => {
+    const analisis = {
+      valores: { arriba: null, abajo: null, izquierda: null, derecha: null },
+      elegida: 'abajo' as const,
+      nodos: 0,
+      ms: 0,
+    }
+    const m = medidoresDeAnalisis({ analisis, tablero }, tablero)
+    expect(m.abajo.estado).toBe('elegida')
+    expect(m.derecha.estado).toBe('legal')
+    expect(m.arriba.estado).toBe('ilegal')
+  })
+})
+
+describe('formatearMs', () => {
+  it('usa coma decimal por debajo de 10 ms', () => {
+    expect(formatearMs(5.24)).toBe('5,2')
+    expect(formatearMs(151.7)).toBe('152')
+    expect(formatearMs(1234)).toBe('1.234')
   })
 })

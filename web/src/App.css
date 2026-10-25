@@ -34,11 +34,6 @@
   font-weight: 560;
 }
 
-.escenario__leyenda {
-  color: var(--tinta-2);
-  font-size: var(--fs-1);
-}
-
 @media (min-width: 1024px) {
   .pagina {
     gap: var(--e-6);

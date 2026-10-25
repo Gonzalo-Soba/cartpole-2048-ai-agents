@@ -1,4 +1,5 @@
-import { DIRECCIONES, type Direccion } from './motor/tablero'
+import type { Analisis } from './agentes/protocolo'
+import { DIRECCIONES, jugadasLegales, type Direccion, type Tablero } from './motor/tablero'
 
 export { DIRECCIONES, type Direccion }
 
@@ -35,7 +36,7 @@ export interface Medidor {
   etiqueta: string
 }
 
-const NOMBRES: Record<Direccion, string> = {
+export const NOMBRES: Record<Direccion, string> = {
   arriba: 'Arriba',
   abajo: 'Abajo',
   izquierda: 'Izquierda',
@@ -49,7 +50,8 @@ export function medidoresDeValores(valores: ValoresBrujula, elegida: Direccion):
   for (const d of DIRECCIONES) {
     const valor = valores[d]
     const estado = valor === null ? 'ilegal' : d === elegida ? 'elegida' : 'legal'
-    const texto = valor === null ? 'ilegal' : formatearNumero(valor)
+    // Un decimal: con enteros, dos jugadas parecen empatadas aunque una gane.
+    const texto = valor === null ? 'ilegal' : decimal.format(valor)
     const sufijo = estado === 'elegida' ? ', jugada elegida' : ''
     medidores[d] = { texto, relleno: relleno[d], estado, etiqueta: `${NOMBRES[d]}: ${texto}${sufijo}` }
   }
@@ -74,9 +76,31 @@ export function medidoresDeLegalidad(legales: readonly Direccion[], ultima: Dire
   return medidores
 }
 
+/**
+ * Medidores del modo agente. Muestran el último análisis sobre el tablero en
+ * que se calculó; el agente aleatorio no tiene valores, así que solo marca
+ * legales y la elegida. Sin análisis todavía, las jugadas legales del tablero actual.
+ */
+export function medidoresDeAnalisis(
+  ultimo: { analisis: Analisis; tablero: Tablero } | null,
+  tableroActual: Tablero,
+): Record<Direccion, Medidor> {
+  if (!ultimo) return medidoresDeLegalidad(jugadasLegales(tableroActual), null)
+  const { analisis, tablero } = ultimo
+  const sinValores = DIRECCIONES.every((d) => analisis.valores[d] === null)
+  if (analisis.elegida === null || sinValores) return medidoresDeLegalidad(jugadasLegales(tablero), analisis.elegida)
+  return medidoresDeValores(analisis.valores, analisis.elegida)
+}
+
 const numero = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0, useGrouping: 'always' })
+const decimal = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 1, useGrouping: 'always' })
 
 /** Formato con punto de miles también en números de 4 cifras (1.130, no 1130). */
 export function formatearNumero(valor: number): string {
   return numero.format(valor)
+}
+
+/** Milisegundos: un decimal por debajo de 10 ms (5,2), enteros a partir de ahí (152). */
+export function formatearMs(ms: number): string {
+  return (ms < 10 ? decimal : numero).format(ms)
 }
