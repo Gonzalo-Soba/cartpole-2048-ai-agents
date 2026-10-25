@@ -48,14 +48,26 @@ function App() {
     listo: agente.estado.fase === 'listo',
   })
 
-  // Pyodide pesa: se carga cuando la página queda ociosa, sin frenar el modo Jugar.
+  // Pyodide pesa: se carga en segundo plano recién cuando la página terminó de
+  // cargar y queda ociosa, sin competir con el modo Jugar. Entrar al modo agente
+  // la arranca antes.
   useEffect(() => {
-    if ('requestIdleCallback' in window) {
-      const id = requestIdleCallback(iniciar, { timeout: 3000 })
-      return () => cancelIdleCallback(id)
+    let cancelar = () => {}
+    const programar = () => {
+      if ('requestIdleCallback' in window) {
+        const id = requestIdleCallback(iniciar, { timeout: 3000 })
+        cancelar = () => cancelIdleCallback(id)
+      } else {
+        const id = setTimeout(iniciar, 1500)
+        cancelar = () => clearTimeout(id)
+      }
     }
-    const id = setTimeout(iniciar, 1500)
-    return () => clearTimeout(id)
+    if (document.readyState === 'complete') programar()
+    else window.addEventListener('load', programar, { once: true })
+    return () => {
+      window.removeEventListener('load', programar)
+      cancelar()
+    }
   }, [iniciar])
 
   const [pista, setPista] = useState(false)
@@ -68,6 +80,7 @@ function App() {
 
   function cambiarModo(m: Modo) {
     if (m === 'jugar') bucle.pausar()
+    else iniciar()
     setModo(m)
   }
 
@@ -152,6 +165,12 @@ function App() {
           />
         )}
       </main>
+      <footer className="pie">
+        <p>
+          Los agentes son el código Python del proyecto, corriendo en el navegador con Pyodide.{' '}
+          <a href="https://github.com/Gonzalo-Soba/cartpole-2048-ai-agents">Código y experimentos en GitHub</a>.
+        </p>
+      </footer>
     </div>
   )
 }
