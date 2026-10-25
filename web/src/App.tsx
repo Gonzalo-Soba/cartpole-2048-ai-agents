@@ -165,6 +165,12 @@ function App() {
           />
         )}
       </main>
+      <footer className="pie">
+        <p>
+          Los agentes son el código Python del proyecto, corriendo en el navegador con Pyodide.{' '}
+          <a href="https://github.com/Gonzalo-Soba/cartpole-2048-ai-agents">Código y experimentos en GitHub</a>.
+        </p>
+      </footer>
     </div>
   )
 }

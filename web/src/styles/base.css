@@ -69,3 +69,11 @@ select {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Sin JavaScript: el CSS se carga igual porque Vite lo enlaza en el HTML. */
+.sin-js {
+  max-width: 40rem;
+  margin: var(--e-7) auto;
+  padding: 0 var(--e-4);
+  font-size: var(--fs-3);
+}

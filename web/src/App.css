@@ -40,6 +40,19 @@
   font-weight: 560;
 }
 
+.pie {
+  padding-top: var(--e-4);
+  border-top: 1px solid var(--linea);
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+
+.pie a {
+  color: var(--tinta);
+  font-weight: 560;
+  text-underline-offset: 0.2em;
+}
+
 @media (min-width: 1024px) {
   .pagina {
     gap: var(--e-6);
