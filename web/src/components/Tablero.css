@@ -37,9 +37,11 @@
 }
 
 /*
- * Cada ficha se ubica con transform según --fila y --col; el 100 % del
- * translate es el lado de la propia ficha. Si llega una jugada a mitad de
- * camino, la transición sale desde donde está hacia el destino nuevo.
+ * Cada ficha se ubica con la propiedad translate según --fila y --col; el
+ * 100 % es el lado de la propia ficha. Si llega una jugada a mitad de camino,
+ * la transición sale desde donde está hacia el destino nuevo. Con transform
+ * en lugar de translate, el pulso de escala se haría desde la esquina del
+ * tablero y correría la ficha.
  */
 .ficha {
   position: absolute;
@@ -58,11 +60,8 @@
   font-variation-settings: 'wdth' var(--ficha-wdth);
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  transform: translate(
-    calc(var(--col) * (100% + var(--separacion))),
-    calc(var(--fila) * (100% + var(--separacion)))
-  );
-  transition: transform var(--dur-desliz) var(--curva);
+  translate: calc(var(--col) * (100% + var(--separacion))) calc(var(--fila) * (100% + var(--separacion)));
+  transition: translate var(--dur-desliz) var(--curva);
 }
 
 .ficha[data-cuerpo='reducido'] {
