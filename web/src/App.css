@@ -12,9 +12,15 @@
   align-items: start;
 }
 
+/*
+ * Limitar el ancho por la altura disponible hace que el tablero entre entero
+ * también en un celular en horizontal. La brújula es unos 6.5rem más baja que
+ * ancha (los laterales ocupan ancho), de ahí el + 3rem.
+ */
 .escenario__juego {
   width: 100%;
-  max-width: 36rem;
+  max-width: min(36rem, 100vh + 3rem);
+  max-width: min(36rem, 100dvh + 3rem);
   justify-self: center;
 }
 
