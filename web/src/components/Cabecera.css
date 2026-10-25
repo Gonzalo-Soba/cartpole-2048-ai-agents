@@ -1,0 +1,86 @@
+.cabecera {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'titulo puntaje'
+    'modo modo';
+  align-items: center;
+  gap: var(--e-4) var(--e-5);
+}
+
+.cabecera__titulo {
+  grid-area: titulo;
+  min-width: 0;
+}
+
+.cabecera__titulo h1 {
+  font-size: var(--fs-4);
+  font-weight: 760;
+  font-variation-settings: 'wdth' 88;
+  line-height: 1.1;
+}
+
+.cabecera__titulo p {
+  margin-top: var(--e-1);
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+
+.cabecera__modo {
+  grid-area: modo;
+}
+
+.cabecera__puntaje {
+  grid-area: puntaje;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+  line-height: 1.2;
+}
+
+.cabecera__cifra {
+  color: var(--tinta);
+  font-size: var(--fs-4);
+  font-weight: 700;
+}
+
+/* Control segmentado: la opción activa usa el acento, con tinta fija encima. */
+.segmentado {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  padding: 3px;
+  border: 1px solid var(--linea-control);
+  border-radius: var(--radio-control);
+  background: var(--papel);
+}
+
+.segmentado__opcion {
+  min-height: 2.5rem;
+  padding: 0 var(--e-4);
+  border: 0;
+  border-radius: calc(var(--radio-control) - 3px);
+  background: transparent;
+  font-weight: 560;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.segmentado__opcion[aria-pressed='true'] {
+  background: var(--senal);
+  color: var(--ficha-oscura);
+  font-weight: 680;
+}
+
+@media (min-width: 1024px) {
+  .cabecera {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: 'titulo modo puntaje';
+  }
+
+  .cabecera__titulo h1 {
+    font-size: var(--fs-5);
+  }
+}

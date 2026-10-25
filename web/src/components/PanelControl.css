@@ -1,0 +1,263 @@
+/* Una columna sobre papel con separadores, no una pila de tarjetas. */
+.panel {
+  padding: var(--e-4);
+  border-radius: var(--radio-tablero);
+  background: var(--papel);
+}
+
+.panel__titulo {
+  display: none;
+  font-size: var(--fs-3);
+  font-weight: 650;
+}
+
+.panel__titulo--siempre {
+  display: block;
+}
+
+.panel__datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--e-3);
+  margin: 0;
+}
+
+.panel__datos dt {
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+
+.panel__datos dd {
+  margin: 0;
+  font-size: var(--fs-4);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.panel__desplegar {
+  display: flex;
+  width: 100%;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--fs-3);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.panel__desplegar--chico {
+  min-height: 2.75rem;
+  border-top: 1px solid var(--linea);
+  border-bottom: 1px solid var(--linea);
+  font-size: var(--fs-2);
+  font-weight: 560;
+}
+
+.panel__plegable {
+  margin-top: var(--e-4);
+}
+
+/* Activado va invertido, como la profundidad elegida: el ámbar es de la acción principal. */
+.boton--alternar[aria-pressed='true'] {
+  border-color: var(--tinta);
+  background: var(--tinta);
+  color: var(--papel);
+}
+
+.panel__ancho {
+  grid-column: 1 / -1;
+}
+
+.campo__valor {
+  margin-left: var(--e-2);
+  color: var(--tinta-2);
+  font-weight: 420;
+}
+
+.panel__desplegar svg {
+  transition: transform var(--dur-desliz) var(--curva);
+}
+
+.panel__desplegar[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.panel__cuerpo[data-abierto='false'] {
+  display: none;
+}
+
+.panel__cuerpo {
+  display: grid;
+  gap: var(--e-5);
+  margin-top: var(--e-4);
+}
+
+.panel__aviso {
+  display: grid;
+  gap: var(--e-1);
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+
+.panel__detalle {
+  overflow-wrap: anywhere;
+}
+
+.panel__reintentar {
+  justify-self: start;
+}
+
+.campo {
+  display: grid;
+  gap: var(--e-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.campo > label,
+.campo > legend {
+  padding: 0;
+  font-weight: 560;
+}
+
+.campo > legend {
+  margin-bottom: var(--e-2);
+}
+
+.campo__ayuda {
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+
+/* Select nativo con flecha propia que sigue el color del texto. */
+.selector {
+  position: relative;
+}
+
+.selector::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: var(--e-4);
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 1.75px solid currentColor;
+  border-bottom: 1.75px solid currentColor;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.selector select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 var(--e-7) 0 var(--e-3);
+  border: 1px solid var(--linea-control);
+  border-radius: var(--radio-control);
+  background: var(--papel);
+  appearance: none;
+}
+
+.segmentado--compacto {
+  justify-self: start;
+}
+
+.segmentado__radio {
+  display: grid;
+  place-items: center;
+  min-width: 3rem;
+  position: relative;
+}
+
+.segmentado__radio input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+/* La profundidad elegida va invertida: el ámbar queda para la acción principal. */
+.segmentado__radio:has(input:checked) {
+  background: var(--tinta);
+  color: var(--papel);
+  font-weight: 680;
+}
+
+.segmentado__radio:has(input:focus-visible) {
+  box-shadow:
+    0 0 0 1px var(--tinta),
+    0 0 0 4px var(--senal);
+}
+
+input[type='range'] {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--senal);
+}
+
+.panel__acciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--e-3);
+}
+
+.boton {
+  min-height: 2.75rem;
+  padding: 0 var(--e-4);
+  border: 1px solid var(--linea-control);
+  border-radius: var(--radio-control);
+  background: var(--papel);
+  font-weight: 620;
+  cursor: pointer;
+}
+
+.boton--principal {
+  border-color: var(--senal);
+  background: var(--senal);
+  color: var(--ficha-oscura);
+}
+
+.panel__seccion {
+  display: grid;
+  gap: var(--e-1);
+  padding-top: var(--e-4);
+  border-top: 1px solid var(--linea);
+}
+
+.panel__seccion h3 {
+  font-size: var(--fs-2);
+  font-weight: 650;
+}
+
+/* Deshabilitado: atenuado y sin puntero de acción, sigue siendo legible. */
+.panel select:disabled,
+.panel input[type='range']:disabled,
+.panel .boton:disabled,
+.panel fieldset:disabled .segmentado__radio,
+.selector:has(select:disabled)::after {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    padding: var(--e-5);
+  }
+
+  .panel__titulo {
+    display: block;
+  }
+
+  .panel__desplegar {
+    display: none;
+  }
+
+  .panel__cuerpo[data-abierto='false'] {
+    display: grid;
+  }
+}

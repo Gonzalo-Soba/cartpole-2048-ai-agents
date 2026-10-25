@@ -1,0 +1,157 @@
+/*
+ * El marco del tablero lleva los medidores adentro: brújula y tablero son un
+ * solo objeto sobre --pizarra.
+ */
+.brujula {
+  --lateral: 2.5rem;
+  display: grid;
+  grid-template-columns: var(--lateral) minmax(0, 1fr) var(--lateral);
+  gap: var(--e-2);
+  padding: var(--e-2);
+  border-radius: var(--radio-tablero);
+  background: var(--pizarra);
+  box-shadow: 0 18px 40px -24px rgb(20 33 58 / 0.6);
+}
+
+.brujula__centro {
+  grid-area: 2 / 2;
+}
+
+.medidor {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  min-width: 0;
+  color: var(--sobre-pizarra);
+  font-size: var(--fs-1);
+  line-height: 1.2;
+}
+
+.medidor--arriba {
+  grid-area: 1 / 2;
+}
+.medidor--abajo {
+  grid-area: 3 / 2;
+}
+.medidor--izquierda {
+  grid-area: 2 / 1;
+}
+.medidor--derecha {
+  grid-area: 2 / 3;
+}
+
+.medidor--arriba,
+.medidor--abajo {
+  padding-block: var(--e-1);
+}
+
+.medidor--izquierda,
+.medidor--derecha {
+  flex-direction: column;
+  text-align: center;
+}
+
+.medidor__corto {
+  display: none;
+}
+
+.medidor__valor {
+  /* Conserva el alto vacío: así el medidor no cambia de largo entre estados. */
+  min-height: 1.2em;
+  color: var(--t2);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.medidor--arriba .medidor__valor,
+.medidor--abajo .medidor__valor {
+  order: 3;
+  min-width: 4ch;
+  text-align: end;
+}
+
+.medidor__barra {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--hueco);
+}
+
+.medidor--arriba .medidor__barra,
+.medidor--abajo .medidor__barra {
+  height: 0.5rem;
+}
+
+.medidor--izquierda .medidor__barra,
+.medidor--derecha .medidor__barra {
+  width: 0.5rem;
+  min-height: 0;
+}
+
+/* El relleno crece desde el centro del lado hacia los dos extremos. */
+.medidor__relleno {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--sobre-pizarra);
+  transform: scaleX(var(--relleno));
+  transition: transform var(--dur-brujula) var(--curva);
+}
+
+.medidor--izquierda .medidor__relleno,
+.medidor--derecha .medidor__relleno {
+  transform: scaleY(var(--relleno));
+}
+
+.medidor[data-estado='elegida'] .medidor__rotulo {
+  color: var(--t2);
+  font-weight: 650;
+}
+
+.medidor[data-estado='elegida'] .medidor__valor {
+  color: var(--senal);
+}
+
+.medidor[data-estado='elegida'] .medidor__relleno {
+  background: var(--senal);
+}
+
+/* Ilegal: barra vacía con borde punteado; el texto conserva el contraste AA. */
+.medidor[data-estado='ilegal'] .medidor__valor {
+  color: var(--sobre-pizarra);
+  font-weight: 420;
+}
+
+.medidor[data-estado='ilegal'] .medidor__barra {
+  background: transparent;
+  outline: 1px dashed rgb(184 196 214 / 0.45);
+  outline-offset: -1px;
+}
+
+/* Móvil: laterales angostos, rótulos cortos y valores condensados. */
+@media (max-width: 639px) {
+  .medidor--izquierda .medidor__largo,
+  .medidor--derecha .medidor__largo {
+    display: none;
+  }
+
+  .medidor--izquierda .medidor__corto,
+  .medidor--derecha .medidor__corto {
+    display: inline;
+  }
+
+  .medidor--izquierda .medidor__valor,
+  .medidor--derecha .medidor__valor {
+    font-variation-settings: 'wdth' 75;
+  }
+}
+
+@media (min-width: 640px) {
+  .brujula {
+    --lateral: 4.75rem;
+    gap: var(--e-3);
+    padding: var(--e-3);
+  }
+}

@@ -1,0 +1,66 @@
+.pagina {
+  display: grid;
+  gap: var(--e-5);
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: var(--e-4);
+}
+
+.escenario {
+  display: grid;
+  gap: var(--e-5);
+  align-items: start;
+}
+
+/*
+ * Limitar el ancho por la altura disponible hace que el tablero entre entero
+ * también en un celular en horizontal. La brújula es unos 6.5rem más baja que
+ * ancha (los laterales ocupan ancho), de ahí el + 3rem.
+ */
+.escenario__juego {
+  width: 100%;
+  max-width: min(36rem, 100vh + 3rem);
+  max-width: min(36rem, 100dvh + 3rem);
+  justify-self: center;
+}
+
+.escenario__estado {
+  display: grid;
+  justify-items: center;
+  gap: var(--e-3);
+  margin-top: var(--e-3);
+  text-align: center;
+}
+
+.escenario__mensaje:empty {
+  display: none;
+}
+
+.escenario__mensaje {
+  font-weight: 560;
+}
+
+.pie {
+  padding-top: var(--e-4);
+  border-top: 1px solid var(--linea);
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+
+.pie a {
+  color: var(--tinta);
+  font-weight: 560;
+  text-underline-offset: 0.2em;
+}
+
+@media (min-width: 1024px) {
+  .pagina {
+    gap: var(--e-6);
+    padding: var(--e-6);
+  }
+
+  .escenario {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22.5rem);
+    gap: var(--e-7);
+  }
+}

@@ -74,3 +74,43 @@ def test_game_stats_are_json_serializable():
     games = [play_game(RandomAgent(seed=s), seed=s) for s in range(3)]
     json.dumps(summarize(games))
     json.dumps(games)
+
+
+def test_analyze_chooses_like_choose():
+    """analyze() muestra valores exactos, pero la jugada elegida tiene que ser la de choose()."""
+    agents = (
+        MinimaxAgent(depth=2, use_alpha_beta=False),
+        MinimaxAgent(depth=2, use_alpha_beta=True),
+        ExpectimaxAgent(depth=2),
+        ExpectimaxAgent(depth=3, min_prob=1e-3),
+    )
+    for b in random_midgame_boards(15, seed=11):
+        legal = {d for d, _ in legal_moves(b)}
+        for agent in agents:
+            result = agent.analyze(b)
+            values = result["move_values"]
+            assert result["chosen"] == agent.choose(b)
+            assert {d for d, v in enumerate(values) if v is not None} == legal
+            assert values[result["chosen"]] == max(v for v in values if v is not None)
+            assert result["nodes"] > 0 and result["ms"] >= 0
+
+
+def test_analyze_values_match_with_and_without_pruning():
+    plain = MinimaxAgent(depth=2, use_alpha_beta=False)
+    pruned = MinimaxAgent(depth=2, use_alpha_beta=True)
+    for b in random_midgame_boards(15, seed=12):
+        for v_plain, v_ab in zip(plain.analyze(b)["move_values"], pruned.analyze(b)["move_values"]):
+            assert (v_plain is None) == (v_ab is None)
+            if v_plain is not None:
+                assert abs(v_plain - v_ab) < 1e-9
+
+
+def test_analyze_without_legal_moves_and_random():
+    full = from_grid([[2, 4, 2, 4], [4, 2, 4, 2], [2, 4, 2, 4], [4, 2, 4, 2]])
+    for agent in (MinimaxAgent(depth=1), ExpectimaxAgent(depth=1), RandomAgent(seed=0)):
+        result = agent.analyze(full)
+        assert result["chosen"] is None and result["move_values"] == [None] * 4
+    b = random_midgame_boards(1, seed=13)[0]
+    result = RandomAgent(seed=0).analyze(b)
+    assert result["chosen"] in [d for d, _ in legal_moves(b)]
+    json.dumps(result)

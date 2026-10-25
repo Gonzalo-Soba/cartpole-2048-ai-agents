@@ -16,6 +16,7 @@ original solo miraba las primeras 4 o 6 y sesgaba la búsqueda).
 
 from __future__ import annotations
 
+import time
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -57,6 +58,13 @@ class RandomAgent(Agent):
         moves = legal_moves(b)
         return moves[int(self.rng.integers(len(moves)))][0] if moves else 0
 
+    def analyze(self, b: int) -> dict:
+        """Misma forma que ``SearchAgent.analyze``; sin búsqueda no hay valores."""
+        start = time.perf_counter()
+        chosen = self.choose(b) if legal_moves(b) else None
+        return {"move_values": [None] * 4, "chosen": chosen, "nodes": 0,
+                "ms": round((time.perf_counter() - start) * 1000, 3)}
+
 
 class SearchAgent(Agent):
     def __init__(self, depth: int = 2, weights: Weights | str = "balanceada"):
@@ -69,6 +77,34 @@ class SearchAgent(Agent):
 
     def heuristic_utility(self, board: GameBoard) -> float:
         return self.evaluate(board.board)
+
+    @abstractmethod
+    def _move_value(self, nb: int) -> float:
+        """Valor exacto del tablero que deja una jugada (antes de la ficha nueva)."""
+
+    def analyze(self, b: int) -> dict:
+        """Valor de cada jugada en la raíz, para mostrar en qué se basa la decisión.
+
+        ``move_values`` sigue el orden UP, DOWN, LEFT, RIGHT, con ``None`` en las
+        jugadas ilegales. A diferencia de ``choose``, cada jugada se evalúa con
+        ventana completa: con alpha-beta, ``choose`` solo obtiene cotas para las
+        jugadas peores. La elección es la misma (ver ``tests/test_agents.py``).
+        """
+        start = time.perf_counter()
+        nodes_before = self.nodes_explored
+        values: list[float | None] = [None] * 4
+        chosen, best = None, NEG_INF
+        for d, nb in legal_moves(b):
+            v = self._move_value(nb)
+            values[d] = v
+            if v > best:
+                chosen, best = d, v
+        return {
+            "move_values": values,
+            "chosen": chosen,
+            "nodes": self.nodes_explored - nodes_before,
+            "ms": round((time.perf_counter() - start) * 1000, 3),
+        }
 
 
 class MinimaxAgent(SearchAgent):
@@ -99,6 +135,11 @@ class MinimaxAgent(SearchAgent):
                 best_move, best_value = d, v
             alpha = max(alpha, best_value)
         return best_move
+
+    def _move_value(self, nb: int) -> float:
+        if self.use_alpha_beta:
+            return self._min_ab(nb, self.depth, NEG_INF, POS_INF)
+        return self._min(nb, self.depth)
 
     # --- sin poda ------------------------------------------------------------
     def _max(self, b: int, depth: int) -> float:
@@ -174,6 +215,13 @@ class ExpectimaxAgent(SearchAgent):
             if v > best_value:
                 best_move, best_value = d, v
         return best_move
+
+    def analyze(self, b: int) -> dict:
+        self._cache = {}  # igual que choose: la tabla vale para una sola jugada
+        return super().analyze(b)
+
+    def _move_value(self, nb: int) -> float:
+        return self._chance(nb, self.depth, 1.0)
 
     def _max(self, b: int, depth: int, prob: float) -> float:
         self.nodes_explored += 1
