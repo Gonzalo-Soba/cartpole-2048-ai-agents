@@ -9,6 +9,10 @@ a fondo, corregí sus errores y lo usé como base para un proyecto bastante más
 | [`cartpole/`](cartpole) | Mantener un poste vertical sobre un carro (Gymnasium `CartPole-v1`) | Q-learning tabular, 3 discretizaciones, búsqueda de hiperparámetros, **Stochastic Q-learning** (Fourati et al., ICML 2024) | 500/500 pasos en los 100 episodios de evaluación, en las 3 semillas |
 | [`game2048/`](game2048) | Jugar 2048 | Minimax con poda alpha-beta, Expectimax, 7 funciones de evaluación | Expectimax a profundidad 3 gana el 80% de las partidas; la poda reduce 85% los nodos sin cambiar decisiones |
 
+Los agentes de 2048 también se pueden ver jugando en el navegador, con el valor que calculan para cada jugada:
+**[gonzalo-soba.github.io/cartpole-2048-ai-agents](https://gonzalo-soba.github.io/cartpole-2048-ai-agents/)**
+(detalles en [La web](#la-web-jugar-o-ver-jugar-al-agente)).
+
 Todos los números de este README salen de los JSON en `*/results/` y se pueden regenerar con los scripts de cada carpeta.
 Cada experimento usa semillas fijas.
 
@@ -126,6 +130,28 @@ esquina (`game2048/heuristics.py`). Con Expectimax d2 y 20 partidas por configur
 
 ---
 
+## La web: jugar o ver jugar al agente
+
+[![Modo agente: Expectimax a mitad de partida, con el valor de cada dirección alrededor del tablero](docs/web-2048.png)](https://gonzalo-soba.github.io/cartpole-2048-ai-agents/)
+
+En [la web](https://gonzalo-soba.github.io/cartpole-2048-ai-agents/) se puede jugar con el teclado (flechas o WASD) o
+deslizando en el celular, o elegir un agente (Aleatorio, Minimax con poda, Expectimax), la profundidad y la función de
+evaluación, y mirarlo jugar. Alrededor del tablero, cada lado muestra el valor que el agente calculó para esa dirección;
+la jugada elegida va en ámbar y las ilegales quedan vacías. En modo Jugar se puede pedir una pista con la misma vista.
+
+Cómo está hecha (`web/`, Vite + React + TypeScript, sin backend):
+
+- **El motor para jugar y animar es TypeScript**, pero tiene que dar exactamente lo mismo que `game2048/board.py`.
+  `web/scripts/export_fixtures.py` exporta 212 casos desde Python (tableros aleatorios, de partidas reales y casos
+  borde) y los tests de Vitest los comparan uno por uno.
+- **Los agentes no están reescritos**: un Web Worker carga [Pyodide](https://pyodide.org/) y ejecuta los mismos `.py`
+  de `game2048/game2048/`. Cada jugada llama a `analyze()`, que devuelve el valor exacto de cada dirección, la elegida,
+  los nodos explorados y el tiempo. Pyodide se descarga en segundo plano, cuando la página ya está lista.
+- Expectimax a profundidad 3 usa la misma poda por probabilidad que los experimentos (`min_prob = 1e-3`).
+- Cada push a `main` se publica en GitHub Pages con GitHub Actions.
+
+---
+
 ## Qué cambió respecto de la primera versión
 
 La primera versión, de diciembre de 2025, tenía problemas que encontré al retomar el proyecto:
@@ -160,6 +186,11 @@ game2048/
   game2048/             board.py (bitboard), heuristics.py, agents.py, game.py
   tests/                motor vs. implementación de referencia, alpha-beta == minimax
   results/  figures/  notebooks/  experiments.py  make_figures.py  play.py
+web/
+  src/motor/            motor de 2048 en TypeScript y fixtures exportados desde Python
+  src/agentes/          Web Worker con Pyodide que corre los agentes de game2048/
+  src/components/       tablero, brújula de decisión y paneles
+  scripts/              export_fixtures.py
 ```
 
 ## Cómo correrlo
@@ -181,6 +212,13 @@ poetry run pytest
 poetry run python play.py --agent expectimax --depth 2      # ver una partida en consola
 poetry run python experiments.py --suite all                # ~40 min en 2 núcleos
 poetry run python make_figures.py
+
+# Web (Node 24)
+cd web
+npm ci
+npm run dev                                                 # http://localhost:5173/cartpole-2048-ai-agents/
+npm test && npm run lint && npm run build
+cd ../game2048 && poetry run python ../web/scripts/export_fixtures.py   # regenera los fixtures del motor
 ```
 
 Los notebooks de `*/notebooks/` resumen los resultados y cargan los modelos guardados.
