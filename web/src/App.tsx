@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { formatearNumero, medidoresDeAnalisis, medidoresDeLegalidad } from './brujula'
+import { formatearNumero, medidoresDeAnalisis, medidoresDeLegalidad, medidoresDeValores } from './brujula'
 import { Brujula } from './components/Brujula'
 import { Cabecera, type Modo } from './components/Cabecera'
 import { PanelControl } from './components/PanelControl'
@@ -8,6 +8,7 @@ import { Tablero } from './components/Tablero'
 import { useAgente } from './hooks/useAgente'
 import { useAgenteJugando } from './hooks/useAgenteJugando'
 import { usePartida } from './hooks/usePartida'
+import { usePista } from './hooks/usePista'
 import { useTeclado } from './hooks/useTeclado'
 import { tableroDeFichas } from './motor/fichas'
 import type { Partida } from './motor/partida'
@@ -57,6 +58,14 @@ function App() {
     return () => clearTimeout(id)
   }, [iniciar])
 
+  const [pista, setPista] = useState(false)
+  const analisisPista = usePista({
+    tablero: tableroDeFichas(persona.partida.fichas),
+    activa: pista && jugando,
+    listo: agente.estado.fase === 'listo',
+    analizar: agente.analizar,
+  })
+
   function cambiarModo(m: Modo) {
     if (m === 'jugar') bucle.pausar()
     setModo(m)
@@ -72,7 +81,15 @@ function App() {
       <main className="escenario">
         <section className="escenario__juego" aria-label="Tablero">
           {jugando ? (
-            <Brujula medidores={medidoresDeLegalidad(jugadasLegales(tablero), partida.ultima)} etiqueta="Jugadas posibles">
+            <Brujula
+              medidores={
+                analisisPista?.elegida
+                  ? medidoresDeValores(analisisPista.valores, analisisPista.elegida)
+                  : // Con la pista activa, el ámbar queda para la sugerencia: así no parpadea mientras calcula.
+                    medidoresDeLegalidad(jugadasLegales(tablero), pista ? null : partida.ultima)
+              }
+              etiqueta={analisisPista ? 'Pista: evaluación de cada jugada' : 'Jugadas posibles'}
+            >
               <Tablero
                 key="persona"
                 fichas={partida.fichas}
@@ -106,7 +123,15 @@ function App() {
           </div>
         </section>
         {jugando ? (
-          <PanelPartida partida={partida} fichaMaxima={fichaMaxima} onNueva={persona.nueva} />
+          <PanelPartida
+            partida={partida}
+            fichaMaxima={fichaMaxima}
+            onNueva={persona.nueva}
+            estadoAgente={agente.estado}
+            pista={pista}
+            onPista={() => setPista((p) => !p)}
+            analisisPista={analisisPista}
+          />
         ) : (
           <PanelControl
             estado={agente.estado}

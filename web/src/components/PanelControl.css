@@ -60,6 +60,13 @@
   margin-top: var(--e-4);
 }
 
+/* Activado va invertido, como la profundidad elegida: el ámbar es de la acción principal. */
+.boton--alternar[aria-pressed='true'] {
+  border-color: var(--tinta);
+  background: var(--tinta);
+  color: var(--papel);
+}
+
 .panel__ancho {
   grid-column: 1 / -1;
 }

@@ -57,7 +57,7 @@ describe('medidoresDeAnalisis', () => {
       ms: 1,
     }
     const m = medidoresDeAnalisis({ analisis, tablero }, tablero)
-    expect(m.derecha).toMatchObject({ estado: 'elegida', texto: '56', relleno: 1 })
+    expect(m.derecha).toMatchObject({ estado: 'elegida', texto: '55,6', relleno: 1 })
     expect(m.abajo).toMatchObject({ estado: 'legal', texto: '40' })
   })
 

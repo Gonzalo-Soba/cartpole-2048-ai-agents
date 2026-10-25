@@ -50,7 +50,8 @@ export function medidoresDeValores(valores: ValoresBrujula, elegida: Direccion):
   for (const d of DIRECCIONES) {
     const valor = valores[d]
     const estado = valor === null ? 'ilegal' : d === elegida ? 'elegida' : 'legal'
-    const texto = valor === null ? 'ilegal' : formatearNumero(valor)
+    // Un decimal: con enteros, dos jugadas parecen empatadas aunque una gane.
+    const texto = valor === null ? 'ilegal' : decimal.format(valor)
     const sufijo = estado === 'elegida' ? ', jugada elegida' : ''
     medidores[d] = { texto, relleno: relleno[d], estado, etiqueta: `${NOMBRES[d]}: ${texto}${sufijo}` }
   }
