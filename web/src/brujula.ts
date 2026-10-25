@@ -60,7 +60,8 @@ export function medidoresDeValores(valores: ValoresBrujula, elegida: Direccion):
 
 /**
  * Medidores sin agente: solo lo que sabe el motor, qué jugadas son legales y
- * cuál fue la última. Sin valores inventados.
+ * cuál fue la última. Sin valores inventados. Las legales no llevan texto
+ * visible (casi siempre lo son las cuatro); el texto accesible sí lo dice.
  */
 export function medidoresDeLegalidad(legales: readonly Direccion[], ultima: Direccion | null): Record<Direccion, Medidor> {
   const medidores = {} as Record<Direccion, Medidor>
@@ -70,7 +71,7 @@ export function medidoresDeLegalidad(legales: readonly Direccion[], ultima: Dire
     } else if (d === ultima) {
       medidores[d] = { texto: 'última', relleno: 1, estado: 'elegida', etiqueta: `${NOMBRES[d]}: legal, última jugada` }
     } else {
-      medidores[d] = { texto: 'legal', relleno: 0, estado: 'legal', etiqueta: `${NOMBRES[d]}: legal` }
+      medidores[d] = { texto: '', relleno: 0, estado: 'legal', etiqueta: `${NOMBRES[d]}: legal` }
     }
   }
   return medidores

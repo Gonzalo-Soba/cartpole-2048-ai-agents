@@ -31,7 +31,7 @@ describe('medidoresDeLegalidad', () => {
   it('marca ilegales, legales y la última jugada sin inventar valores', () => {
     const m = medidoresDeLegalidad(['arriba', 'izquierda', 'derecha'], 'izquierda')
     expect(m.abajo).toMatchObject({ estado: 'ilegal', relleno: 0, texto: 'ilegal' })
-    expect(m.arriba).toMatchObject({ estado: 'legal', relleno: 0, texto: 'legal' })
+    expect(m.arriba).toMatchObject({ estado: 'legal', relleno: 0, texto: '', etiqueta: 'Arriba: legal' })
     expect(m.izquierda).toMatchObject({ estado: 'elegida', relleno: 1, texto: 'última' })
   })
 
@@ -46,7 +46,7 @@ describe('medidoresDeAnalisis', () => {
   it('sin análisis muestra las jugadas legales del tablero actual', () => {
     const m = medidoresDeAnalisis(null, tablero)
     expect(m.arriba.estado).toBe('ilegal')
-    expect(m.abajo).toMatchObject({ estado: 'legal', texto: 'legal' })
+    expect(m.abajo).toMatchObject({ estado: 'legal', texto: '', etiqueta: 'Abajo: legal' })
   })
 
   it('con valores muestra los valores y la elegida', () => {
