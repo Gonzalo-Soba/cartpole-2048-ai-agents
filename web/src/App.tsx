@@ -1,25 +1,51 @@
 import { useEffect, useState } from 'react'
-import { formatearNumero, medidoresDeLegalidad, medidoresDeValores } from './brujula'
+import { formatearNumero, medidoresDeAnalisis, medidoresDeLegalidad } from './brujula'
 import { Brujula } from './components/Brujula'
 import { Cabecera, type Modo } from './components/Cabecera'
 import { PanelControl } from './components/PanelControl'
 import { PanelPartida } from './components/PanelPartida'
 import { Tablero } from './components/Tablero'
-import { BRUJULA_EJEMPLO, FICHAS_EJEMPLO } from './datos/ejemplo'
 import { useAgente } from './hooks/useAgente'
+import { useAgenteJugando } from './hooks/useAgenteJugando'
 import { usePartida } from './hooks/usePartida'
 import { useTeclado } from './hooks/useTeclado'
 import { tableroDeFichas } from './motor/fichas'
+import type { Partida } from './motor/partida'
 import { exponenteMaximo, jugadasLegales, valorDeExponente } from './motor/tablero'
 import './App.css'
 
+function fichaMaximaDe(partida: Partida): number {
+  return valorDeExponente(exponenteMaximo(tableroDeFichas(partida.fichas)))
+}
+
+/**
+ * Texto de estado de una partida. No cambia hasta la próxima partida, así que
+ * se anuncia una sola vez; por eso cada modo tiene el suyo siempre en el DOM.
+ */
+function textoEstado(partida: Partida, aviso2048: string): string {
+  if (partida.terminada) {
+    return `Sin movimientos. Ficha máxima ${fichaMaximaDe(partida)}, puntaje ${formatearNumero(partida.puntaje)}.`
+  }
+  return partida.llego2048 ? aviso2048 : ''
+}
+
 function App() {
   const [modo, setModo] = useState<Modo>('jugar')
-  const { partida, jugar, nueva } = usePartida()
   const jugando = modo === 'jugar'
-  useTeclado(jugar, jugando)
+
+  const persona = usePartida()
+  useTeclado(persona.jugar, jugando)
+
   const agente = useAgente()
   const { iniciar } = agente
+  const deAgente = usePartida()
+  const bucle = useAgenteJugando({
+    partida: deAgente.partida,
+    jugar: deAgente.jugar,
+    nueva: deAgente.nueva,
+    analizar: agente.analizar,
+    listo: agente.estado.fase === 'listo',
+  })
 
   // Pyodide pesa: se carga cuando la página queda ociosa, sin frenar el modo Jugar.
   useEffect(() => {
@@ -31,58 +57,75 @@ function App() {
     return () => clearTimeout(id)
   }, [iniciar])
 
-  const tablero = tableroDeFichas(partida.fichas)
-  const fichaMaxima = valorDeExponente(exponenteMaximo(tablero))
-
-  // El texto no cambia hasta la próxima partida, así que se anuncia una sola vez.
-  // Por eso queda en el DOM también en modo agente: si se vaciara, se repetiría al volver.
-  let estado = ''
-  if (partida.terminada) {
-    estado = `Sin movimientos. Ficha máxima ${fichaMaxima}, puntaje ${formatearNumero(partida.puntaje)}.`
-  } else if (partida.llego2048) {
-    estado = 'Llegaste a 2048. Podés seguir jugando.'
+  function cambiarModo(m: Modo) {
+    if (m === 'jugar') bucle.pausar()
+    setModo(m)
   }
+
+  const partida = jugando ? persona.partida : deAgente.partida
+  const tablero = tableroDeFichas(partida.fichas)
+  const fichaMaxima = fichaMaximaDe(partida)
 
   return (
     <div className="pagina">
-      <Cabecera modo={modo} onModo={setModo} puntaje={jugando ? partida.puntaje : 0} />
+      <Cabecera modo={modo} onModo={cambiarModo} puntaje={partida.puntaje} />
       <main className="escenario">
         <section className="escenario__juego" aria-label="Tablero">
           {jugando ? (
             <Brujula medidores={medidoresDeLegalidad(jugadasLegales(tablero), partida.ultima)} etiqueta="Jugadas posibles">
               <Tablero
+                key="persona"
                 fichas={partida.fichas}
                 absorbidas={partida.absorbidas}
                 etiqueta={`Tablero, ficha máxima ${fichaMaxima}`}
-                onDeslizar={jugar}
+                onDeslizar={persona.jugar}
               />
             </Brujula>
           ) : (
-            <Brujula
-              medidores={medidoresDeValores(BRUJULA_EJEMPLO.valores, BRUJULA_EJEMPLO.elegida)}
-              etiqueta="Evaluación de cada jugada"
-              descripcionId="leyenda-ejemplo"
-            >
-              <Tablero fichas={FICHAS_EJEMPLO} etiqueta="Tablero de ejemplo, ficha máxima 4096" descripcionId="leyenda-ejemplo" />
+            <Brujula medidores={medidoresDeAnalisis(bucle.ultimo, tablero)} etiqueta="Evaluación de cada jugada">
+              <Tablero
+                key="agente"
+                fichas={partida.fichas}
+                absorbidas={partida.absorbidas}
+                etiqueta={`Tablero del agente, ficha máxima ${fichaMaxima}`}
+              />
             </Brujula>
           )}
           <div className="escenario__estado">
             <p role="status" className={jugando ? 'escenario__mensaje' : 'solo-lectores'}>
-              {estado}
+              {textoEstado(persona.partida, 'Llegaste a 2048. Podés seguir jugando.')}
             </p>
-            {!jugando && (
-              <p id="leyenda-ejemplo" className="escenario__leyenda">
-                Valores de ejemplo
-              </p>
-            )}
-            {jugando && partida.terminada && (
-              <button type="button" className="boton boton--principal" onClick={nueva}>
+            <p role="status" className={jugando ? 'solo-lectores' : 'escenario__mensaje'}>
+              {textoEstado(deAgente.partida, 'El agente llegó a 2048 y sigue jugando.')}
+            </p>
+            {partida.terminada && (
+              <button type="button" className="boton boton--principal" onClick={jugando ? persona.nueva : bucle.nueva}>
                 Nueva partida
               </button>
             )}
           </div>
         </section>
-        {jugando ? <PanelPartida partida={partida} fichaMaxima={fichaMaxima} onNueva={nueva} /> : <PanelControl estado={agente.estado} onReintentar={agente.reintentar} />}
+        {jugando ? (
+          <PanelPartida partida={partida} fichaMaxima={fichaMaxima} onNueva={persona.nueva} />
+        ) : (
+          <PanelControl
+            estado={agente.estado}
+            onReintentar={agente.reintentar}
+            config={bucle.config}
+            onConfig={bucle.setConfig}
+            velocidad={bucle.velocidad}
+            onVelocidad={bucle.setVelocidad}
+            corriendo={bucle.corriendo}
+            pensando={bucle.pensando}
+            terminada={partida.terminada}
+            ultimo={bucle.ultimo}
+            movimientos={partida.movimientos}
+            fichaMaxima={fichaMaxima}
+            onAlternar={bucle.alternar}
+            onPaso={bucle.paso}
+            onNueva={bucle.nueva}
+          />
+        )}
       </main>
     </div>
   )

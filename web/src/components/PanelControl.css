@@ -48,6 +48,28 @@
   cursor: pointer;
 }
 
+.panel__desplegar--chico {
+  min-height: 2.75rem;
+  border-top: 1px solid var(--linea);
+  border-bottom: 1px solid var(--linea);
+  font-size: var(--fs-2);
+  font-weight: 560;
+}
+
+.panel__plegable {
+  margin-top: var(--e-4);
+}
+
+.panel__ancho {
+  grid-column: 1 / -1;
+}
+
+.campo__valor {
+  margin-left: var(--e-2);
+  color: var(--tinta-2);
+  font-weight: 420;
+}
+
 .panel__desplegar svg {
   transition: transform var(--dur-desliz) var(--curva);
 }
